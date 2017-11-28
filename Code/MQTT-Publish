@@ -1,0 +1,25 @@
+//Mongoose OS MQTT Publish
+load('api_mqtt.js');
+load('api_gpio.js');
+let pin = 0, topic = 'my/topic';
+let msg = 'Test';
+GPIO.set_button_handler(pin, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 200, function() {
+  let res = MQTT.pub('my/topic', JSON.stringify(msg), 1);
+  print('Published:', res ? 'yes' : 'no');
+}, null);
+
+
+Code for Ubuntu to produce a notificiation telling me the letterbox is open!
+
+mosquitto_sub -t postwatch -h 192.168.0.3 | while read OUTPUT; do notify-send "$OUTPUT"; done
+
+
+
+load('api_mqtt.js');
+load('api_gpio.js');
+let pin = 15, topic = 'postwatch';
+let msg = 'Letterbox Open';
+GPIO.set_button_handler(pin, GPIO.PULL_UP, GPIO.INT_EDGE_NEG, 2000, function() {
+  let res = MQTT.pub(topic, JSON.stringify(msg), 1);
+  print('Published:', res ? 'yes' : 'no');
+}, null);
